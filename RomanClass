@@ -1,0 +1,143 @@
+// Example program
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+class RomanClass
+{
+    public:
+        RomanClass() {};
+        ~RomanClass() {};
+    
+        map<char, int> romanMap;
+        
+        void InitializeMap();
+        int convertRomanToNum(string str);
+        string convertNumtoRoman(int number);
+};
+
+
+
+int main()
+{
+    int sum, diff;
+    string str1, str2;
+    
+    RomanClass rObject;
+    
+    rObject.InitializeMap();
+    
+    cout << " Enter the two Roman char which are less than 500 = ";
+    cin >> str1 >> str2;
+    
+    int number1 = rObject.convertRomanToNum(str1);
+    int number2 = rObject.convertRomanToNum(str2);
+    
+    // Addition
+    sum = number1 + number2;
+    
+    // Subtraction
+    diff = (number1 > number2) ? (number1 - number2) : (number2 - number1);
+    
+    string romanadd = rObject.convertNumtoRoman(sum);
+    string romandiff = rObject.convertNumtoRoman(diff);
+    cout << "output add = " << romanadd << " Diff = " << romandiff;
+    return 0;
+}
+
+void RomanClass::InitializeMap()
+{
+    romanMap['M'] = 1000;
+    romanMap['D'] = 500;
+    romanMap['C'] = 100;
+    romanMap['L'] = 50;
+    romanMap['X'] = 10;
+    romanMap['V'] = 5;
+    romanMap['I'] = 1;
+}
+
+int RomanClass::convertRomanToNum(string str)
+{
+    int res = 0;
+    signed int strSize = str.size();
+    for (int i = 0; i < strSize - 1; ++i)
+    {
+        if (romanMap[str[i]] < romanMap[str[i+1]])
+            res -= romanMap[str[i]];
+        else
+            res += romanMap[str[i]];
+    }
+    res += romanMap[str[str.size()-1]];
+    return res;
+}
+
+string RomanClass::convertNumtoRoman(int num)
+{
+    string roman;
+    
+    int intnum, m, d, c, l, x, v, i, n;
+    intnum = num;
+
+    m = intnum / 1000;
+    d = ((intnum%1000)/500);
+    c = ((intnum%500)/100);
+    l = ((intnum%100)/50);
+    x = ((intnum%50)/10);
+    v = ((intnum%10)/5);
+    i = (intnum%5);
+    n = m+d+c+l+x+v+i;
+
+
+    while (n > 0)
+    {
+        if (m > 0)
+        {
+            roman = "M";
+            m--;
+            n--;
+        }
+        else if (d > 0)
+        {
+            roman.append("D");
+            d--;
+            n--;
+        }
+        else if (c > 0)
+        {
+            roman.append("C");
+            c--;
+            n--;
+        }
+        else if (l > 0)
+        {
+            roman.append("L");
+            l--;
+            n--;
+        }
+        else if (x > 0)
+        {
+            roman.append("X");
+            x--;
+            n--;
+        }
+        else if (v > 0)
+        {
+            roman.append("V");
+            v--;
+            n--;
+        }
+        else if (i > 0)
+        {
+            roman.append("I");
+            i--;
+            n--;
+        }
+    }
+    
+    if(roman == "")
+        roman = "Invalid";
+    
+    return roman;
+}
